@@ -3,6 +3,8 @@ package com.revature.todo;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,14 +44,30 @@ public class TodoController {
 			@ApiResponse(code = 404, message = "Unable to find Todo by provided ID")
 	})
 	@GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_PLAIN_VALUE})
-	public ResponseEntity<?> findById(@PathVariable("id") Long id, @RequestHeader(value = "Accept", defaultValue = MediaType.APPLICATION_JSON_VALUE) String accept) {
-		if (id != null && id > 0) {
-			Todo todo = todoService.findById(id);
-			if (MediaType.TEXT_PLAIN_VALUE.equals(accept)) {
-				return ResponseEntity.ok(todo.toString());
-			}
-			return ResponseEntity.ok(todoService.findById(id));
+	public ResponseEntity<?> findById(@PathVariable("id") String textId, @RequestHeader(value = "Accept", defaultValue = MediaType.APPLICATION_JSON_VALUE) String accept) {
+		
+		//This section of Exception Handling would be moved to ControllerAdvice in this project
+		Long id = 0L;
+		try {
+			id = Long.valueOf(textId);
+		} catch (NumberFormatException e) {
+			//TODO: Set headers programmatically for plaintext error messages, or produce error messages as the appropriate MediaType (JSON)
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("Failed to parse id path variable as a number:" + textId);
 		}
+		
+		if (id != null && id > 0) {
+			try {
+				Todo todo = todoService.findById(id);
+				if (MediaType.TEXT_PLAIN_VALUE.equals(accept)) {
+					return ResponseEntity.ok(todo.toString());
+				}
+				return ResponseEntity.ok(todoService.findById(id));
+			} catch (TodoNotFoundException e) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Todo with id: " + id + " not found.");
+			}
+		}
+		// This exception thrown from Controller is handled by ControllerAdvice and used to produce appropriate HTTP Response
 		throw new PathVariableExpectedException(id);
 	}
 

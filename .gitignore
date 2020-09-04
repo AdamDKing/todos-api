@@ -34,3 +34,5 @@ mvnw
 mvnw.cmd
 .idea/
 RevProTodosAPI.iml
+/bin/
+/.gradle/

@@ -16,5 +16,7 @@ public class RESTExceptionHandler {
 	public ResponseEntity<Map<String, String>> handleException(ApiException exception) {
 		return ResponseEntity.status(exception.getStatus()).body(exception.getErrorMessage());
 	}
+	
+	//Probably I would handle NumberFormatException here in the Controller Advice
 
 }

@@ -2,10 +2,7 @@ package com.revature.todo;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
-
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import java.time.LocalDate;
 import java.util.Objects;

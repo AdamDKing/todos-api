@@ -154,38 +154,8 @@ public class Todo {
 		if (getClass() != obj.getClass())
 			return false;
 		Todo other = (Todo) obj;
-		if (category == null) {
-			if (other.category != null)
-				return false;
-		} else if (!category.equals(other.category))
-			return false;
-		if (completed != other.completed)
-			return false;
-		if (createdOn == null) {
-			if (other.createdOn != null)
-				return false;
-		} else if (!createdOn.equals(other.createdOn))
-			return false;
-		if (dueDate == null) {
-			if (other.dueDate != null)
-				return false;
-		} else if (!dueDate.equals(other.dueDate))
-			return false;
-		if (id != other.id)
-			return false;
-		if (priority != other.priority)
-			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
-		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
-			return false;
-		return true;
+		//Since this is a Hibernate Entity, equality is determined by id.  (YMMV)
+		return this.id == other.getId();
 	}
 
 	@Override
